@@ -6,11 +6,13 @@
         <meta http-equiv="Content-Type" content="text/html"/>
         <meta charset="utf-8"/>
 
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min    .css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+        <script src="./basic_js.js" type="text/javascript"></script>
         <link href="./navbar.css" rel="stylesheet">
+        <link href="./input.css" rel="stylesheet">
 
 
     </head>
@@ -21,11 +23,34 @@
         <!-- navbar section -->
         <div class="navbar">
             <ul>
-                <a class="navbar-brand" href="#">EMRKS</a>
-                <li><a href="#">Login</a></li>
-                <li><a href="#">Create Account</a></li>
+                <a style="font-size: 20px; font-weight: bold;" href="#">EMRKS</a>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="creation.html">Create Account</a></li>
             </ul>
         </div>
+
+        <div class="well welldiv" style="width: 30em; margin-left: auto; margin-right: auto;">
+            <div style="display: block; margin-left: 110px; margin-right: auto;">
+            <span style="margin-left: 55px; font-weight: bold; font-size: 18px;">Login</span>
+            <br>
+            <input class="text" style="margin-bottom: 3px;" id="username" name="username" placeholder="Username">
+            <input class="text" id="password" name="password" placeholder="Password">
+
+            <select id="account_type" style="margin-top: 5px;" onChange="getData(this)">
+                  <option value="patient" id="patient_s">Patient</option>
+                  <option value="doctor" id="doctor_s">Doctor</option>
+                  <option value="nurse" id="nurse_s">Nurse</option>
+                  <option value="receptionist" id="recep_s">Receptionist</option>
+            </select>
+
+            <input class="text" id="code" name="code" placeholder="Code" style="margin-top: 5px; display: none">
+
+            <button style="margin-top: 5px; margin-left: 0x;" id="login-button">Login</button>
+        </div>
+        </div>
+
+
+
 
     </body>
 </html>

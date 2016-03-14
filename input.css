@@ -1,0 +1,55 @@
+.welldiv {
+    background-color: #f9f9f9;
+}
+
+select {
+    width: 162px;
+    background-color: #f2f2f2;
+    border: 1px solid #999999;
+    text-decoration: none;
+    -webkit-border-radius: 0px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: inline-block;
+
+    padding: 2px 15px 2px 2px;
+    background: url(1456191668_icon-arrow-down-b.png) no-repeat right;
+    background-size: 15px 15px;
+}
+
+select:hover {
+    cursor: pointer;
+    color: #fff;
+    background-color: #bfbfbf;
+    background: url(1456191668_icon-arrow-down-b.png) no-repeat 15px right;
+
+}
+
+option {
+    cursor: pointer;
+}
+
+button {
+   width: 165px; 
+   border-radius: 7px;
+   background-color: #f2f2f2;
+   border: 1px solid #999999;
+}
+
+button:hover {
+    background-color: #bfbfbf;
+    color: #fff;
+
+}
+
+input[type=text] {
+
+
+}
+
+
+.centering {
+    margin-left: 300px;
+}
+
+
