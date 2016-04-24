@@ -2,6 +2,7 @@ html {
     background-color: #334d4d;
 }
 
+
 table { /*http://www.w3schools.com/css/tryit.asp?filename=trycss_table_border_divider*/
     border-collapse;
     width: 100%;
@@ -19,6 +20,11 @@ body {
 
 .welldiv {
     background-color: #f9f9f9;
+    min-width: 30em;
+    width: 100%;
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 select {
@@ -61,12 +67,19 @@ button:hover {
 
 }
 
-#registration_form div {
+#registration_form div{
     margin-left: 25px;
     float: left;
 }
 
-#registration_form input[type=text] {
+#edit_info {
+}
+
+#edit_info input[type=text] {
+    margin-top: 5px;
+    display: block;
+}
+#registration_form input[type=text], .reg-forms input[type=text]{
     margin-top: 5px;
 
 }

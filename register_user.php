@@ -1,10 +1,12 @@
 <?php
-    $servername = "";
-    $username = "";
-    $password = "";
+    
+    $username = "xcao";
+    $password = "potatogo";
+    $database = "xcao";
+    $host = "mysqldev.aero.und.edu";
     
     
-    $conn = mysql_connect($servername, $username, $password);
+    $conn = mysql_connect($host, $username, $password);
     if(! $conn)
     {
         die('Could not connect' . mysql_error());
@@ -17,7 +19,7 @@
     $info_array = array_values($info_output);
     
     
-    mysql_select_db('');
+    mysql_select_db($database, $conn);
     mysql_query("SET NAMES utf8");
     
     

@@ -1,8 +1,8 @@
 <?php
-    $servername = "";
-    $username = "";
-    $password = "";
-    
+    $servername = "mysqldev.aero.und.edu";
+    $username = "xcao";
+    $password = "potatogo";
+    $database = "xcao";
     
     $conn = mysql_connect($servername, $username, $password);
     if(! $conn)
@@ -21,7 +21,7 @@
     $sqltester = "SELECT labtesterID, Fname, Lname FROM labtester WHERE username = '" . $username . "' AND password = '" . $password . "';";
     
     
-    mysql_select_db('');
+    mysql_select_db($database, $conn);
     mysql_query("SET NAMES utf8");
     $result_doctor = mysql_query($sqldoctor, $conn);
     $result_patient = mysql_query($sqlpatient, $conn);

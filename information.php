@@ -1,4 +1,8 @@
 <?php
+    
+    $lookatid = mysql_escape_string( $_GET["id"] );
+    $lookattype = mysql_escape_string( $_GET["type"]);
+    
     /*
     if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]) ||)
     {
@@ -13,7 +17,7 @@
     else
     {
         /*
-        if( $_SESSION["typeofuser"] == "patient" )
+        if( $_SESSION["typeofuser"] == "patient" && $lookattype == "patient")
         {
             echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
             echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
@@ -31,23 +35,20 @@
             $password = "potatogo";
             $database = "xcao";
             $host = "mysqldev.aero.und.edu";
-            $connect = mysql_connect($host,$username,$password);
-            mysql_select_db($database, $connect);
+            //$connect = mysql_connect($host,$username,$password);
+            //mysql_select_db($database, $connect);
             
             if( $_SESSION["typeofuser"] == "labtester")
             {
-                $sql = "Select test_appointmentID, patientID, date, time, Fname, Lname FROM appointment WHERE testerID = '". $_SESSION["userID"] ."';";
+                $sql = "Select * FROM appointment WHERE testerID = '". $_SESSION["userID"] ."';";
             }
             else
             {
-                $sql = "Select appointmentID, patientID, date, time, Fname, Lname FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."';";
+                $sql = "Select * FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."';";//maybe dont use * because we are grabbing the password right now
             }
             
             
-            $result = mysql_query($sql);
-            if(! $result) {
-                die('Could not work: ' . mysql_error());
-            }
+            //$result = mysql_query($sql);
             ?>
             <!DOCTYPE html>
                 <title>EMRKS-Appointments</title>
@@ -90,49 +91,64 @@
 
 
 <?php
-        echo "<div class=\"well welldiv\" style=\"width: 30em; margin-left: auto; margin-right: auto;\">";
-        echo "<table>";
-        echo "<thead>";
-        echo "<td>Checkbox</td>";
-        echo "<td>ID</td>";
-        echo "<td>Patient</td>";
-        echo "<td>Date</td>";
-        echo "<td>Time</td>";
-        echo "</thead>";
-        echo "<tr>";
-        if(mysqli_num_rows($result) > 0)
-        {
+    echo "<div class=\"well welldiv\">";
+    echo "<div style=\"display: block; margin-left: 110px; margin-right: auto;\">";
+    if(mysqli_num_rows($result) > 0)
+    {
         while ($row = mysql_fetch_array($result)) {
+            /*
             if($_SESSION["userID"] == "labtester")
             {
-                $appID = $row["appointmentID"];
-                $patID = $row["patientID"];
-                $name = $row["Fname"] ." ". $row["Lname"];
-                $date = $row["date"];
-                $time = $row["time"];
+                
             }
             else
             {
-                $appID = $row["test_appointmentID"];
-                $patID = $row["patientID"];
-                $name = $row["Fname"] ." ". $row["Lname"];
-                $date = $row["date"];
-                $time = $row["time"];
-            }
-            echo "<td><input type='checkbox' value='$appID' class='tcheck'></td>";
-            echo "<td>$appID</td>";
-            echo "<td><a href='information.php?id=$patID&type=\"patient\"'>$name</td>";
-            echo "<td>$date</td>";
-            echo "<td>$time</td>";
-            echo "</tr";
-            }
+                
+            }*/
+            
+            $Fname = $row["Fname"];
+            $Lname = $row["Lname"];
+            $Mname = $row["Mname"];
+            $ssn = $row["SSN"];
+            $age = $row["age"];
+            $gender = $row["gender"];
+            $phone = $row["phone_number"];
+            $email = $row["email"];
+            $address = $row["address"];
+            $city = $row["city"];
+            $zip = $row["zipcode"];
+            $state = $row["state"];
         }
-        echo "</table>";
-        echo "<button id=\"delete_button\" style=\"margin-top: 5px;\">Delete</button>";
-        echo "</div>";
+    }
+    echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Patient Information</span>";
+    echo "<br>";
+    echo "<p><b>First Name: </b>$Fname</p>";
+    echo "<p><b>Last Name: </b>$Lname</p>";
+    echo "<p><b>Middle Name: </b>$Mname</p>";
+    ?>
+<?php if($_SESSION["typeofuser"] == "receptionist" || 2==2){
+
+echo "<p><b>SSN: </b>$ssn</p>";
+}?>
+<?php
+    echo "<p><b>Age: </b>$age</p>";
+    echo "<p><b>Gender: </b>$gender</p>";
+    ?>
+<?php if($_SESSION["typeofuser"] == "receptionist" || 2==2){
+echo "<p><b>Phone: </b>$phone</p>";
+echo "<p><b>Email: </b>$email</p>";
+echo "<p><b>Address: </b>$address</p>";
+echo "<p><b>City: </b>$city</p>";
+echo "<p><b>State: </b>$state</p>";
+echo "<p><b>ZIP: </b>$zip</p>";
+}
+    ?>
+<?php
+    echo "</div>";
+    echo "</div>";
     
     
-            mysql_close();
+            //mysql_close();
         }
 
 
