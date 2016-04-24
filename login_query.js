@@ -24,10 +24,7 @@ $(document).ready(function() {
                 success: function(result){
                     console.log(result);
 
-                    if(result == true){
-                        window.location.replace("place link here");
-                    } 
-                    else{
+                    if( result == false){
                         $("#password_input").val("");
                         $("#bad_auth").show();
                     }

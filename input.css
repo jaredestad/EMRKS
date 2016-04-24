@@ -1,3 +1,22 @@
+html {
+    background-color: #334d4d;
+}
+
+table { /*http://www.w3schools.com/css/tryit.asp?filename=trycss_table_border_divider*/
+    border-collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid black;
+}
+
+body {
+    background-color: #334d4d;
+}   
+
 .welldiv {
     background-color: #f9f9f9;
 }
@@ -42,8 +61,13 @@ button:hover {
 
 }
 
-input[type=text] {
+#registration_form div {
+    margin-left: 25px;
+    float: left;
+}
 
+#registration_form input[type=text] {
+    margin-top: 5px;
 
 }
 
