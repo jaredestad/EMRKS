@@ -18,8 +18,8 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: "./auth_user.php",
-                data: {username, password},
-                type: "text",
+                data: { data1: username, data2: password},
+                dataType: "text",
 
                 success: function(result){
                     console.log(result);
@@ -27,6 +27,9 @@ $(document).ready(function() {
                     if( result == false){
                         $("#password_input").val("");
                         $("#bad_auth").show();
+                    }
+                    else{
+                        window.location = "./home.php";
                     }
 
 

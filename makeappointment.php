@@ -1,6 +1,7 @@
 <?php
+    session_start();
     
-    if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]) ||)
+    if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
         echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
@@ -80,11 +81,12 @@
         echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Make an Appointment</span>";
         echo "<br>";
         echo "<form id=\"app_form\">";
-        echo "<input type=\"text\" id=\"time_input\" placeholder=\"Time\"><br>";
-        echo "<input type=\"text\" id=\"date_input\" placeholder=\"Date\"><br>";
+        echo "<input type=\"text\" id=\"time_input\" placeholder=\"00:00:00\">";
+        echo "<input type=\"text\" id=\"date_input\" placeholder=\"YYYY-MM-DD\">";
         echo "</form>";
         echo "<select id=\"app_select\" style=\"margin-top: 5px;\">";
-        if(mysqli_num_rows($result) > 0)
+        echo "<option value=\"\"> </option>";
+        if(mysql_num_rows($result) > 0)
         {
         while ($row = mysql_fetch_array($result)) {
             $name = $row["Fname"] ." ". $row["Lname"];

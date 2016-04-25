@@ -1,5 +1,5 @@
 <?php
-    
+    session_start();
     
     if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
     {
@@ -34,19 +34,19 @@
             <ul>
                 <a style=\"font-size: 20px; font-weight: bold;\" href=\"#\">EMRKS</a>";
     ?>
-                <li><a href=\"editpage\">Edit Information</a></li>
+                <li><a href="edit_information.php">Edit Information</a></li>
 
 <?php if($_SESSION["typeofuser"] == "patient") : ?>
-                <li><a href=\"bookpage\">Book Appointment</a></li>
-                <li><a href=\"viewap\">Search For Doctor</a></li>
-                <li><a href=\"viewap\">My Records</a></li>
-                <li><a href=\"viewap\">My Appointments</a></li>
+                <li><a href="makeappointment.php">Book Appointment</a></li>
+                <li><a href="viewap">Search For Doctor</a></li>
+                <li><a href="viewap">My Records</a></li>
+                <li><a href="viewap">My Appointments</a></li>
 <?php endif; ?>
 <?php if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse" || $_SESSION["typeofuser"] == "admin" || $_SESSION["typeofuser"] == "receptionist") : ?>
-                <li><a href=\"viewap\">View Appointments</a></li>
+                <li><a href="appointment.php">View Appointments</a></li>
 <?php endif; ?>
 <?php if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse" || $_SESSION["typeofuser"] == "admin" || $_SESSION["typeofuser"] == "receptionist") : ?>
-                <li><a href=\"viewap\">Search For Patient</a></li>
+                <li><a href="viewap">Search For Patient</a></li>
 <?php endif; ?>
 
 <?php

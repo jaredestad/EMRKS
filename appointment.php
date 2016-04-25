@@ -1,6 +1,7 @@
 <?php
+    session_start();
     
-    if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]) ||)
+    if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
         echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
@@ -28,11 +29,21 @@
             
             if( $_SESSION["typeofuser"] == "labtester")
             {
-                $sql = "Select test_appointmentID, patientID, date, time, Fname, Lname FROM appointment WHERE testerID = '". $_SESSION["userID"] ."';";
+                $sql = "Select appointmentID, patientID, date, time FROM test_appointment WHERE labtesterID = '". $_SESSION["userID"] ."';";
+                
+            }
+            else if($_SESSION["typeofuser"] == "doctor")
+            {
+                $sql = "Select appointmentID, patientID, date, time FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."';";
             }
             else
             {
-                $sql = "Select appointmentID, patientID, date, time, Fname, Lname FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."';";
+                $sql = "Select appointmentID, patientID, date, time FROM appointment;";
+                $sql2 = "Select appointmentID, patientID, date, time FROM test_appointment;";
+                $result2 = mysql_query($sql2);
+                if(! $result2) {
+                    die('Could not work: ' . mysql_error());
+                }
             }
             
             
@@ -82,8 +93,10 @@
 
 
 <?php
-        echo "<div class=\"well welldiv\" style=\"width: 30em; margin-left: auto; margin-right: auto;\">";
+        echo "<div class=\"well welldiv\" style=\"width: 300px;\">";
+        echo "<div style=\"width: 300px; margin-left: 40px;\">";
         echo "<table>";
+    
         echo "<thead>";
         echo "<td>Checkbox</td>";
         echo "<td>ID</td>";
@@ -91,36 +104,41 @@
         echo "<td>Date</td>";
         echo "<td>Time</td>";
         echo "</thead>";
-        echo "<tr>";
-        if(mysqli_num_rows($result) > 0)
+         
+    
+        if(mysql_num_rows($result) > 0)
         {
         while ($row = mysql_fetch_array($result)) {
             if($_SESSION["userID"] == "labtester")
             {
                 $appID = $row["appointmentID"];
                 $patID = $row["patientID"];
-                $name = $row["Fname"] ." ". $row["Lname"];
                 $date = $row["date"];
                 $time = $row["time"];
             }
             else
             {
-                $appID = $row["test_appointmentID"];
+                $appID = $row["appointmentID"];
                 $patID = $row["patientID"];
-                $name = $row["Fname"] ." ". $row["Lname"];
                 $date = $row["date"];
                 $time = $row["time"];
             }
+            echo "<tr>";
             echo "<td><input type='checkbox' value='$appID' class='tcheck'></td>";
             echo "<td>$appID</td>";
-            echo "<td><a href='information.php?id=$patID&type=\"patient\"'>$name</td>";
+            echo "<td><a href='information.php?id=$patID&type=\"patient\"'>$patID</td>";
             echo "<td>$date</td>";
             echo "<td>$time</td>";
-            echo "</tr";
+            echo "</tr>";
             }
         }
         echo "</table>";
+    
+    
+        echo "<div style=\"width: 300px;\">";
         echo "<button id=\"delete_button\" style=\"margin-top: 5px;\">Delete</button>";
+        echo "</div>";
+        echo "</div>";
         echo "</div>";
     
     

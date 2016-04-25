@@ -1,4 +1,6 @@
 <?php
+
+    session_start();
     
     $username = "root";
     $password = "password";
@@ -6,14 +8,30 @@
     $host = "localhost";
     $connect = mysql_connect($host,$username,$password);
     mysql_select_db($database, $connect);
-    $time = mysql_string_escape($_POST["time"]);
-    $date = mysql_string_escape($_POST["date"]);
-    $docID = mysql_string_escape($_POST["docID"]);
+    
+    
+    $time = mysql_real_escape_string($_POST["data2"]);
+    $date = mysql_real_escape_string($_POST["data3"]);
+    $docID = mysql_real_escape_string($_POST["data1"]);
+    
+    
+    if(! $connect)
+    {
+        die('Could not connect' . mysql_error());
+    }
     
     //may need to make this work for lab tester
-    $query = "INSERT INTO appointment (time, date, doctorID, patientID) VALUES (". $time .", ". $date .", ". $docID .", ". $_SESSION["userID"] .");";
+    $query = "INSERT INTO appointment (time, date, doctorID, patientID) VALUES ('". $time ."', '". $date ."', ". $docID .", ". $_SESSION["userID"] .");";
     
-    $result = mysql_query($query);
+    
+    $result = mysql_query($query, $connect);
+    
+    if(! $result) {
+        die('Could not work: ' . mysql_error());
+    }
+    
+    echo "true";
+    
     mysql_close();
     
 

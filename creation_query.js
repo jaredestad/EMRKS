@@ -42,22 +42,28 @@ $(document).ready(function() {
 
             var user_info = $("#registration_form").serialize();
             console.log(user_info);
+            console.log(account_type);
 
             $.ajax({
                 type: "POST",
+                traditional: true,
                 url: "./register_user.php",
-                data: {user_info, account_type},
-                type: "text",
+                data: {data1: user_info, data2: account_type},
+                dataType: "text",
 
 
-                succes: function(result) {
+                success: function(result) {
                     console.log(result);
 
                         if(result == "bad_username"){
                             alert("Username already registered");
                         }
+                        else if(result == "true"){
+                            window.location = "./home.php";
+        
+                        }
                         else{
-                            alert("ERROR: Could not create account");
+                            alert("ERROR: Could not create account. Please verify all information is correct.");
                         }
 
 

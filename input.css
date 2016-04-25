@@ -5,8 +5,10 @@ html {
 
 table { /*http://www.w3schools.com/css/tryit.asp?filename=trycss_table_border_divider*/
     border-collapse;
-    width: 100%;
+    width: 300px;
+    display: block;
 }
+
 
 th, td {
     padding: 8px;

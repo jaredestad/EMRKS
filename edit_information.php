@@ -1,6 +1,8 @@
 <?php
     
-    if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]) ||)
+    session_start();
+    
+    if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
         echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
@@ -65,7 +67,7 @@
     echo "<div class=\"well welldiv\" style=\"width: 300px;\">";
     echo "<div style=\"display: block; margin-left: 110px; margin-right: auto; width: 100px;\">";
     
-    if(mysqli_num_rows($result) > 0)
+    if(mysql_num_rows($result) > 0)
     {
         while ($row = mysql_fetch_array($result)) {
             
@@ -87,34 +89,25 @@
     echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Edit Information</span>";
     echo "<br>";
     echo "<form id=\"edit_info\">";
-    echo "<input type=\"text\" value=\"$Fname\" placeholder=\"Firstname\">";
-    echo "<input type=\"text\" value=\"$Lname\" placeholder=\"Lastname\">";
-    echo "<input type=\"text\" value=\"$Mname\" placeholder=\"Middlename\">";
-    echo "<input type=\"text\" value=\"$ssn\" placeholder=\"SSN\">";
-    echo "<input type=\"text\" value=\"$age\" placeholder=\"Age\">";
-    echo "<input type=\"text\" value=\"$gender\" placeholder=\"Gender\">";
-    echo "<input type=\"text\" value=\"$phone\" placeholder=\"Phone Number\">";
-    echo "<input type=\"text\" value=\"$email\" placeholder=\"Email\">";
-    echo "<input type=\"text\" value=\"$address\" placeholder=\"Address\">";
-    echo "<input type=\"text\" value=\"$city\" placeholder=\"City\">";
-    echo "<input type=\"text\" value=\"$state\" placeholder=\"State\">";
-    echo "<input type=\"text\" value=\"$zip\" placeholder=\"Zip Code\">";
-    echo "<input type=\"text\" value=\"$pass\" placeholder=\"Password\">";
+    echo "<input type=\"text\" name=\"Fname\" value=\"$Fname\" placeholder=\"Firstname\">";
+    echo "<input type=\"text\" name=\"Lname\" value=\"$Lname\" placeholder=\"Lastname\">";
+    echo "<input type=\"text\" name=\"Mname\" value=\"$Mname\" placeholder=\"Middlename\">";
+    echo "<input type=\"text\" name=\"ssn\" value=\"$ssn\" placeholder=\"SSN\">";
+    echo "<input type=\"text\" name=\"age\" value=\"$age\" placeholder=\"Age\">";
+    echo "<input type=\"text\" name=\"gender\" value=\"$gender\" placeholder=\"Gender\">";
+    echo "<input type=\"text\" name=\"phone\" value=\"$phone\" placeholder=\"Phone Number\">";
+    echo "<input type=\"text\" name=\"email\" value=\"$email\" placeholder=\"Email\">";
+    echo "<input type=\"text\" name=\"address\" value=\"$address\" placeholder=\"Address\">";
+    echo "<input type=\"text\" name=\"city\" value=\"$city\" placeholder=\"City\">";
+    echo "<input type=\"text\" name=\"state\" value=\"$state\" placeholder=\"State\">";
+    echo "<input type=\"text\" name=\"zip\" value=\"$zip\" placeholder=\"Zip Code\">";
+    echo "<input type=\"text\" name=\"pass\" value=\"$pass\" placeholder=\"Password\">";
     echo "</form>";
-    echo "<button id=\"save_info\" style=\"margin-top: 5px;\">Save</button>";
+    echo "<button id=\"save_info\" style=\"margin-top: 5px;\" >Save</button>";
     echo "</div>";
     echo "</div>";
-    
-    
-            mysql_close();
-
-
-
-    
+    mysql_close();
     }
-
-
-
 ?>
 </body>
 </html>

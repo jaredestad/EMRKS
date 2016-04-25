@@ -15,7 +15,8 @@
         {
             $query = "DELETE FROM test_appointment WHERE appointmentID = $appID";
         }
-        else{
+        else if($_SESSION["uesrId"] == "doctor")
+        {
             $query = "DELETE FROM appointment WHERE appointmentID = $appID";
         }
     }
