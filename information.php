@@ -3,40 +3,32 @@
     $lookatid = mysql_escape_string( $_GET["id"] );
     $lookattype = mysql_escape_string( $_GET["type"]);
     
-    /*
+    
     if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]) ||)
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
         echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
         die();
-    }*/
-    if(2==3)
-    {
-        
     }
     else
     {
-        /*
+        
         if( $_SESSION["typeofuser"] == "patient" && $lookattype == "patient")
         {
             echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
             echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
             die();
             
-        }*/
-        if(2==3)
-        {
-            
         }
         else
         {
             
-            $username = "xcao";
-            $password = "potatogo";
+            $username = "root";
+            $password = "passwor";
             $database = "xcao";
-            $host = "mysqldev.aero.und.edu";
-            //$connect = mysql_connect($host,$username,$password);
-            //mysql_select_db($database, $connect);
+            $host = "localhost";
+            $connect = mysql_connect($host,$username,$password);
+            mysql_select_db($database, $connect);
             
             if( $_SESSION["typeofuser"] == "labtester")
             {
@@ -48,7 +40,7 @@
             }
             
             
-            //$result = mysql_query($sql);
+            $result = mysql_query($sql);
             ?>
             <!DOCTYPE html>
                 <title>EMRKS-Appointments</title>
@@ -148,7 +140,7 @@ echo "<p><b>ZIP: </b>$zip</p>";
     echo "</div>";
     
     
-            //mysql_close();
+            mysql_close();
         }
 
 

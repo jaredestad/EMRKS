@@ -1,36 +1,28 @@
 <?php
-    /*
+    
     if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]) ||)
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
         echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
         die();
-    }*/
-    if(2==3)
-    {
-        
     }
     else
     {
-        /*
+        
         if( $_SESSION["typeofuser"] == "patient" )
         {
             echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
             echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
             die();
             
-        }*/
-        if(2==3)
-        {
-            
         }
         else
         {
             
-            $username = "xcao";
-            $password = "potatogo";
+            $username = "root";
+            $password = "password";
             $database = "xcao";
-            $host = "mysqldev.aero.und.edu";
+            $host = "localhost";
             $connect = mysql_connect($host,$username,$password);
             mysql_select_db($database, $connect);
             

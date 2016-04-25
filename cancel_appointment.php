@@ -1,9 +1,9 @@
 <?php
     
-    $username = "xcao";
-    $password = "potatogo";
+    $username = "root";
+    $password = "password";
     $database = "xcao";
-    $host = "mysqldev.aero.und.edu";
+    $host = "localhost";
     $connect = mysql_connect($host,$username,$password);
     mysql_select_db($database, $connect);
     $array = $_POST["thoseChecked"];
@@ -13,7 +13,7 @@
     {
         if($_SESSION["userID"] == "labtester")
         {
-            $query = "DELETE FROM test_appointment WHERE test_appointmentID = $appID";
+            $query = "DELETE FROM test_appointment WHERE appointmentID = $appID";
         }
         else{
             $query = "DELETE FROM appointment WHERE appointmentID = $appID";

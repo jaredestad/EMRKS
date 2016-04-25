@@ -1,7 +1,7 @@
 <?php
-    $servername = "mysqldev.aero.und.edu";
-    $username = "xcao";
-    $password = "potatogo";
+    $servername = "localhost";
+    $username = "root";
+    $password = "password";
     $database = "xcao";
     
     $conn = mysql_connect($servername, $username, $password);

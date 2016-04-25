@@ -1,9 +1,9 @@
 <?php
     
-    $username = "xcao";
-    $password = "potatogo";
+    $username = "root";
+    $password = "password";
     $database = "xcao";
-    $host = "mysqldev.aero.und.edu";
+    $host = "localhost";
     
     
     $conn = mysql_connect($host, $username, $password);

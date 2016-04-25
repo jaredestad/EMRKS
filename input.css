@@ -81,6 +81,7 @@ button:hover {
 }
 #registration_form input[type=text], .reg-forms input[type=text]{
     margin-top: 5px;
+    display: block;
 
 }
 

@@ -1,0 +1,169 @@
+1 create table doctor(
+	username char(254) not null,
+	age int not null,
+	Lname char(254) not null,
+	Mname char(254),
+	Fname char(254) not null,
+	doctorID int auto_increment,
+	password char(254) not null,
+	SSN int not null,
+	gender char(254) not null,
+	phone_number int not null,
+	email char(254) not null,
+	address char(254) not null,
+	city char(254) not null,
+	state char(254) not null,
+	zipcode char(254) not null,
+	primary key(doctorID));
+
+2 create table prescription(
+	prescriptionID int auto_increment,
+	tradename char(254) not null,
+	quantity int not null,
+	patientID int,
+	doctorID int,
+	date date not null,
+	primary key(prescriptionID),
+	foreign key(patientID) references patient(patientID),
+	foreign key(doctorID) references doctor(doctorID));
+
+3 create table patient(
+	age int not null,
+	patientID int auto_increment,
+	Lname char(254) not null,
+	Mname char(254),
+	Fname char(254) not null,
+	username char(254) not null,
+	password char(254) not null,
+	SSN int not null,
+	gender char(254) not null,
+	phone_number int not null,
+	email char(254) not null,
+	address char(254) not null,
+	city char(254) not null,
+	state char(254) not null,
+	zipcode char(254) not null,
+	primary key(patientID));
+
+4 create table medical_history(
+	patientID int,
+	symptom char(254) not null,
+	treatment char(254) not null,
+	foreign key (patientID) references patient(patientID));
+
+5 create table labtest(
+	patientID int,
+	result char(254) not null,
+	date date not null,
+	foreign key (patientID) references patient(patientID));
+
+6 create table physical_history(
+	patientID int,
+	height int not null,
+	weight int not null,
+	blood_type char(2) not null,
+	foreign key (patientID) references patient(patientID));	
+
+7 create table allergies(
+	patientID int,
+	allergy char(254) not null,
+	foreign key (patientID) references patient(patientID));	
+
+8 create table appointment(
+	appointmentID int auto_increment,
+	patientID int,
+	doctorID int,
+	date date not null,
+	time time not null,
+	primary key(appointmentID),
+	foreign key(patientID) references patient(patientID),
+	foreign key(doctorID) references doctor(doctorID));
+
+9 create table insurance(
+	patientID int,
+	card_number int not null,
+	company_name char(254) not null,
+	company_phone int not null,
+	foreign key (patientID) references patient(patientID));	
+
+10 create table nurse(
+	age int not null,
+	Lname char(254) not null,
+	Mname char(254),
+	Fname char(254) not null,
+	nurseID int auto_increment,
+	username char(254) not null,
+	password char(254) not null,
+	SSN int not null,
+	gender char(254) not null,
+	phone_number int not null,
+	email char(254) not null,
+	address char(254) not null,
+	city char(254) not null,
+	state char(254) not null,
+	zipcode char(254) not null,
+	primary key(nurseID));
+
+11 create table receptionist(
+	age int not null,
+	Lname char(254) not null,
+	Mname char(254),
+	Fname char(254) not null,
+	receptionistID int auto_increment,
+	username char(254) not null,
+	password char(254) not null,
+	SSN int not null,
+	gender char(254) not null,
+	phone_number int not null,
+	email char(254) not null,
+	address char(254) not null,
+	city char(254) not null,
+	state char(254) not null,
+	zipcode char(254) not null,
+	primary key(receptionistID));
+
+12 create table admin(
+	age int not null,
+	Lname char(254) not null,
+	Mname char(254),
+	Fname char(254) not null,
+	adminID int auto_increment,
+	username char(254) not null,
+	password char(254) not null,
+	SSN int not null,
+	gender char(254) not null,
+	phone_number int not null,
+	email char(254) not null,
+	address char(254) not null,
+	city char(254) not null,
+	state char(254) not null,
+	zipcode char(254) not null,
+	primary key(adminID));
+
+13 create table labtester(
+	age int not null,
+	Lname char(254) not null,
+	Mname char(254),
+	Fname char(254) not null,
+	labtesterID int auto_increment,
+	username char(254) not null,
+	password char(254) not null,
+	SSN int not null,
+	gender char(254) not null,
+	phone_number int not null,
+	email char(254) not null,
+	address char(254) not null,
+	city char(254) not null,
+	state char(254) not null,
+	zipcode char(254) not null,
+	primary key(labtesterID));
+
+14 create table test_appointment(
+	appointmentID int auto_increment,
+	patientID int,
+	labtesterID int, 
+	date date not null,
+	time time not null,
+	primary key(appointmentID),
+	foreign key(patientID) references patient(patientID),
+	foreign key(labtesterID) references labtester(labtesterID));
