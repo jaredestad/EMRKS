@@ -1,10 +1,11 @@
 <?php
+    session_start();
     
     $lookatid = mysql_escape_string( $_GET["id"] );
     $lookattype = mysql_escape_string( $_GET["type"]);
     
     
-    if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]) ||)
+    if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
         echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
@@ -24,19 +25,15 @@
         {
             
             $username = "root";
-            $password = "passwor";
+            $password = "password";
             $database = "xcao";
             $host = "localhost";
             $connect = mysql_connect($host,$username,$password);
             mysql_select_db($database, $connect);
             
-            if( $_SESSION["typeofuser"] == "labtester")
+            if( $lookattype == "patient")
             {
-                $sql = "Select * FROM appointment WHERE testerID = '". $_SESSION["userID"] ."';";
-            }
-            else
-            {
-                $sql = "Select * FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."';";//maybe dont use * because we are grabbing the password right now
+                $sql = "SELECT Fname, Lname, Mname, ssn, age, gender, phone_number, email, address, city, state, zipcode FROM patient WHERE patientID = '". $lookatid ."';";
             }
             
             
@@ -85,18 +82,9 @@
 <?php
     echo "<div class=\"well welldiv\">";
     echo "<div style=\"display: block; margin-left: 110px; margin-right: auto;\">";
-    if(mysqli_num_rows($result) > 0)
+    if(mysql_num_rows($result) > 0)
     {
         while ($row = mysql_fetch_array($result)) {
-            /*
-            if($_SESSION["userID"] == "labtester")
-            {
-                
-            }
-            else
-            {
-                
-            }*/
             
             $Fname = $row["Fname"];
             $Lname = $row["Lname"];
@@ -118,7 +106,7 @@
     echo "<p><b>Last Name: </b>$Lname</p>";
     echo "<p><b>Middle Name: </b>$Mname</p>";
     ?>
-<?php if($_SESSION["typeofuser"] == "receptionist" || 2==2){
+<?php if($_SESSION["typeofuser"] == "receptionist"){
 
 echo "<p><b>SSN: </b>$ssn</p>";
 }?>
@@ -126,7 +114,7 @@ echo "<p><b>SSN: </b>$ssn</p>";
     echo "<p><b>Age: </b>$age</p>";
     echo "<p><b>Gender: </b>$gender</p>";
     ?>
-<?php if($_SESSION["typeofuser"] == "receptionist" || 2==2){
+<?php if($_SESSION["typeofuser"] == "receptionist"){
 echo "<p><b>Phone: </b>$phone</p>";
 echo "<p><b>Email: </b>$email</p>";
 echo "<p><b>Address: </b>$address</p>";
@@ -136,6 +124,11 @@ echo "<p><b>ZIP: </b>$zip</p>";
 }
     ?>
 <?php
+    
+    echo "<button >Prescribe</button>";
+    
+    
+    
     echo "</div>";
     echo "</div>";
     

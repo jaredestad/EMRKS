@@ -1,18 +1,40 @@
 $(document).ready(function() {
 
-    $("#delete_button").click(function() {
+    $(".remove_regapp").click(function() {
+        var appID = $(this).attr('id');    
 
-        var thoseChecked = [];
-
-        $(".tcheck").each(function() {
-            console.log($(this).value);
-            thoseChecked.push($(this).value); 
-        });        
 
         $.ajax({
             type: "POST",
             url: "./cancel_appointment.php",
-            data: {thoseChecked},
+            data: {data1: appID},
+            dataType: "text",
+
+            success : function(result) {
+
+                window.location.reload();
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+
+
+        });
+
+
+    });
+    $(".remove_testapp").click(function() {
+        var appID = $(this).attr('id');    
+
+
+        $.ajax({
+            type: "POST",
+            url: "./cancel_testappointment.php",
+            data: {data1: appID},
             dataType: "text",
 
             success : function(result) {

@@ -27,13 +27,13 @@
             $connect = mysql_connect($host,$username,$password);
             mysql_select_db($database, $connect);
             
-            if($_SESSION["typeofuser"] == "doctor")
+            if($_SESSION["typeofuser"] == "labtester")
             {
-                $sql = "Select appointmentID, patientID, date, time FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."' ORDER BY date, time;";
+                $sql = "Select appointmentID, patientID, date, time FROM test_appointment WHERE labtesterID = '". $_SESSION["userID"] ."' ORDER BY date, time;";
             }
             else
             {
-                $sql = "Select appointmentID, patientID, date, time FROM appointment;";
+                $sql = "Select appointmentID, patientID, date, time FROM test_appointment;";
             }
             
             
@@ -121,10 +121,10 @@
             
             echo "<tr>";
             echo "<td>$appID</td>";
-            echo "<td><a href='view_personal_information.php?id=$patID&type=patient'>$name</td>";
+            echo "<td><a href='view_personal_information.php?id=$patID&type=\"patient\"'>$name</td>";
             echo "<td>$date</td>";
             echo "<td>$time</td>";
-            echo "<td><span id='$appID' class=\"remove_regapp\" style=\"margin-top: 5px;\">&#10006</span></td>";
+            echo "<td><span id='$appID' class=\"remove_testapp\" style=\"margin-top: 5px;\">&#10006</span></td>";
             echo "</tr>";
         }
     }

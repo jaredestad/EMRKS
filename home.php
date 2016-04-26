@@ -44,6 +44,7 @@
 <?php endif; ?>
 <?php if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse" || $_SESSION["typeofuser"] == "admin" || $_SESSION["typeofuser"] == "receptionist") : ?>
                 <li><a href="appointment.php">View Appointments</a></li>
+                <li><a href="labtest_appointment.php">View Lab Tests</a></li>
 <?php endif; ?>
 <?php if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse" || $_SESSION["typeofuser"] == "admin" || $_SESSION["typeofuser"] == "receptionist") : ?>
                 <li><a href="viewap">Search For Patient</a></li>

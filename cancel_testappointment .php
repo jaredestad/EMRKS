@@ -9,7 +9,7 @@
     $appID = $_POST["data1"];
     
     
-    $query = "DELETE FROM appointment WHERE appointmentID = ". $appID .";";
+    $query = "DELETE FROM test_appointment WHERE appointmentID = ". $appID .";";
     $result = mysql_query($query);
     mysql_close();
     

@@ -2,6 +2,15 @@ html {
     background-color: #334d4d;
 }
 
+.remove_regapp {
+    width: 20px;
+
+}
+.remove_regapp:hover {
+    color: #ff0000;
+    cursor: pointer;
+}
+
 
 table { /*http://www.w3schools.com/css/tryit.asp?filename=trycss_table_border_divider*/
     border-collapse;
