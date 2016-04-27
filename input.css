@@ -6,11 +6,21 @@ html {
     width: 20px;
 
 }
-.remove_regapp:hover {
+.remove_regapp:hover, .cancel_edit:hover, .cancel_medit:hover {
     color: #ff0000;
     cursor: pointer;
 }
+.shower {
+    display: none;
+}
+.edit_hist:hover, .confirm_pedit:hover, .confirm_medit:hover {
+    color: #33cc33;
+    cursor: pointer;
+}
 
+.margins {
+    margin-right: 5px;
+}
 
 table { /*http://www.w3schools.com/css/tryit.asp?filename=trycss_table_border_divider*/
     border-collapse;

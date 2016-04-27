@@ -1,6 +1,8 @@
 <?php
     session_start();
     
+    $lookatid = mysql_escape_string( base64_decode($_GET["id"]));
+    
     if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
@@ -9,7 +11,7 @@
     }
     else
     {
-        
+    
             $username = "root";
             $password = "password";
             $database = "xcao";
@@ -17,21 +19,9 @@
             $connect = mysql_connect($host,$username,$password);
             mysql_select_db($database, $connect);
             
-            if($_SESSION["typeofuser"] == "doctor")
-            {
-                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."' ORDER BY date, time;";
-            }
-            else if($_SESSION["typeofuser"] == "patient")
-            {
-                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment WHERE patientID = '". $_SESSION["userID"] ."' ORDER BY date, time;";
-            }
-            else
-            {
-                $sql = "Select appointmentID, patientID, date, time FROM appointment ORDER BY date, time;";
-            }
-            
-            
+            $sql = "SELECT Fname, Lname FROM patient WHERE patientID = '". $lookatid ."';";
             $result = mysql_query($sql);
+            
             if(! $result) {
                 die('Could not work: ' . mysql_error());
             }
@@ -46,6 +36,7 @@
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
                 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
                 <script src="./basic_js.js" type="text/javascript"></script>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
                 <link href="./navbar.css" rel="stylesheet">
                 <link href="./input.css" rel="stylesheet">
             </head>
@@ -77,47 +68,58 @@
 
 
 <?php
-    echo "<div class=\"well welldiv\" style=\"width: 300px;\">";
-    echo "<div style=\"width: 300px; margin-left: 40px;\">";
-    echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Appointments</span>";
-    echo "<br>";
-    echo "<table>";
-    
-    echo "<thead>";
-    echo "<td>ID</td>";
-    echo "<td>Patient</td>";
-    echo "<td>Date</td>";
-    echo "<td>Time</td>";
-    echo "<td>Doctor</td>";
-    echo "<td> </td>";
-    echo "</thead>";
-    
     
     if(mysql_num_rows($result) > 0)
     {
         while ($row = mysql_fetch_array($result)) {
+            $name = $row["Fname"] ." ". $row["Lname"];
+        }
+        
+    }
+    
+    echo "<div class=\"well welldiv\" style='width: 475px;'>";
+    echo "<div class='reg-forms' style='width: 475px; margin-left: 40px;'>";
+    echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Prescriptions for</span>";
+    echo "<br>";
+    echo "<a href='view_personal_information.php?id=". base64_encode($lookatid) ."&type=". base64_encode(patient) ."' style=\"margin-left: 0px; font-weight: bold; font-size: 18px; cursor: pointer;\">$name</a>";
+    echo "<br>";
+    if($_SESSION["typeofuser"] == "doctor")
+    {
+    echo "<input value=$lookatid id='id_getter' style='display: none;'></input>";
+    echo "<input type='text' id='tradename' placeholder='Tradename'></input>";
+    echo "<input type='text' id='quantity' placeholder='Quantity'></input>";
+    
+    echo "<button class=\"margins\" style=\"margin-top: 5px;\" id=\"confirm_prescriptionbutton\">Confirm</button>";
+    }
+    
+    
+    echo "<table>";
+    
+    echo "<thead>";
+    echo "<td>ID</td>";
+    echo "<td>Date</td>";
+    echo "<td>Doctor</td>";
+    echo "<td>Tradename</td>";
+    echo "<td>Quantity</td>";
+    if($_SESSION["typeofuser"] == "doctor")
+    echo "<td> </td>";
+    echo "</thead>";
+    
+    $sql2 = "SELECT * FROM prescription WHERE patientID = '". $lookatid ."' ORDER BY date DESC;";
+    $result2 = mysql_query($sql2);
+    if(! $result2) {
+        die('Could not work: ' . mysql_error());
+    }
+    
+    if(mysql_num_rows($result2) > 0)
+    {
+        while ($row2 = mysql_fetch_array($result2)) {
             
-            $appID = $row["appointmentID"];
-            $patID = $row["patientID"];
-            $date = $row["date"];
-            $time = $row["time"];
-            $docID = $row["doctorID"];
-            
-            
-            $sql2 = "SELECT Fname, Lname FROM patient WHERE patientID = '". $patID ."';";
-            $result2 = mysql_query($sql2);
-            if(! $result2) {
-                die('Could not work: ' . mysql_error());
-            }
-            if(mysql_num_rows($result2) > 0)
-            {
-                while ($row2= mysql_fetch_array($result2)){
-                    
-                    $name = $row2["Fname"] ." ". $row2["Lname"];
-                }
-            }
-            
-            
+            $tradename = $row2["tradename"];
+            $date = $row2["date"];
+            $quantity = $row2["quantity"];
+            $prescID = $row2["prescriptionID"];
+            $docID = $row2["doctorID"];
             
             $sql3 = "SELECT Fname, Lname FROM doctor WHERE doctorID = '". $docID ."';";
             $result3 = mysql_query($sql3);
@@ -127,18 +129,21 @@
             if(mysql_num_rows($result3) > 0)
             {
                 while ($row3 = mysql_fetch_array($result3)) {
-                    $name2 = $row3["Fname"] ." ". $row3["Lname"];
+                    $name = $row3["Fname"] ." ". $row3["Lname"];
                 }
             }
             
             echo "<tr>";
-            echo "<td>$appID</td>";
-            echo "<td><a href='view_personal_information.php?id=". base64_encode($patID) ."&type=". base64_encode(patient) ."'>$name</td>";
+            echo "<td>$prescID</td>";
             echo "<td>$date</td>";
-            echo "<td>$time</td>";
-            echo "<td><a href='view_personal_information.php?id=". base64_encode($docID) ."&type=". base64_encode(doctor) ."'>$name2</td>";
-            echo "<td><span id='$appID' class=\"remove_regapp\" style=\"margin-top: 5px;\">&#10006</span></td>";
-            echo "<input value='appointment' id='hidden_type' style='display: none;'></input>";
+            echo "<td><a href='view_personal_information.php?id=". base64_encode($docID) ."&type=". base64_encode(doctor) ."'>$name</td>";
+            echo "<td>$tradename</td>";
+            echo "<td>$quantity</td>";
+            if($_SESSION["typeofuser"] == "doctor")
+            {
+            echo "<td><span id='$prescID' class=\"remove_regapp\" style=\"margin-top: 5px;\">&#10006</span></td>";
+            }
+            echo "<input value='presrec' id='hidden_type' style='display: none;'></input>";
             echo "</tr>";
         }
     }
@@ -150,7 +155,6 @@
     
     mysql_close();
     }
-    
     
     
     

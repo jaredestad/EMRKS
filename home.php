@@ -36,12 +36,14 @@
     ?>
                 <li><a href="edit_information.php">Edit Information</a></li>
 
-<?php if($_SESSION["typeofuser"] == "patient") : ?>
-                <li><a href="makeappointment.php">Book Appointment</a></li>
-                <li><a href="viewap">Search For Doctor</a></li>
-                <li><a href="viewap">My Records</a></li>
-                <li><a href="viewap">My Appointments</a></li>
-<?php endif; ?>
+<?php if($_SESSION["typeofuser"] == "patient")
+    {
+                echo "<li><a href=\"makeappointment.php\">Book Appointment</a></li>";
+                echo "<li><a href=\"viewap\">Search For Doctor</a></li>";
+                echo "<li><a href='view_personal_information.php?id=". base64_encode($_SESSION["userID"]) ."&type=". base64_encode($_SESSION["typeofuser"]) ."'>My Records</a></li>";
+                echo "<li><a href=\"appointment.php\">My Appointments</a></li>";
+    }
+?>
 <?php if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse" || $_SESSION["typeofuser"] == "admin" || $_SESSION["typeofuser"] == "receptionist") : ?>
                 <li><a href="appointment.php">View Appointments</a></li>
                 <li><a href="labtest_appointment.php">View Lab Tests</a></li>

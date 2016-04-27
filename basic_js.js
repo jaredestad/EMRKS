@@ -1,18 +1,313 @@
 $(document).ready(function() {
 
+    $("#add_allergy").click(function() {
+        var id = $("#id_getter")[0].value;
+        var allergy = $("#allergy_input")[0].value;
+
+        $.ajax({
+            type: "POST",
+            url: "./add_allergy.php",
+            data: {data1: id, data2:allergy},
+            dataType: "text",
+
+            success : function(result) {
+                if(result == "true"){
+                    window.location.reload();
+
+                }
+                else{
+                    alert("Could not update entry");
+                }
+
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+
+
+        });
+    });
+    $(".edit_hist").click(function() {
+        var id = $(this).attr("id");
+        var $trparent = $(this).closest("tr");
+        $trparent.find(".hidder").hide();
+        $trparent.find(".shower").show();
+        document.getElementById("maindiv").style.width = "800px";
+
+
+    });
+    $(".confirm_medit").click(function() {
+        var id = $(this).attr("id");
+        var $trparent = $(this).closest("tr");
+
+        $trparent.find(".hidder").show();
+        $trparent.find(".shower").hide();
+        
+        var symp = $trparent.find("#csymptom")[0].value;
+        var treat = $trparent.find("#ctreatment")[0].value;
+        
+
+
+        if(checkVis() == true)
+        document.getElementById("maindiv").style.width = "300px";
+
+        $.ajax({
+            type: "POST",
+            url: "./med_updater.php",
+            data: {data1: id, data2: symp, data3: treat},
+            dataType: "text",
+
+            success : function(result) {
+                if(result == "true"){
+        $trparent.find("#osymptom")[0].innerHTML = symp;
+        $trparent.find("#otreatment")[0].innerHTML = treat;
+
+                }
+                else{
+                    alert("Could not update entry");
+                }
+
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+
+
+        });
+    });
+    $(".cancel_medit").click(function() {
+        var id = $(this).attr("id");
+        var $trparent = $(this).closest("tr");
+
+        $trparent.find(".hidder").show();
+        $trparent.find(".shower").hide();
+        if(checkVis() == true)
+            document.getElementById("maindiv").style.width = "300px";
+        var symp = $trparent.find("#osymptom")[0].innerHTML;
+        var treat = $trparent.find("#otreatment")[0].innerHTML;
+
+        $trparent.find("#csymptom")[0].value = symp;
+        $trparent.find("#ctreatment")[0].value = treat;
+
+    });
+
+    $(".cancel_edit").click(function() {
+        var id = $(this).attr("id");
+        var $trparent = $(this).closest("tr");
+
+        $trparent.find(".hidder").show();
+        $trparent.find(".shower").hide();
+        if(checkVis() == true)
+            document.getElementById("maindiv").style.width = "300px";
+        var height = $trparent.find("#oheight")[0].innerHTML;
+        var weight = $trparent.find("#oweight")[0].innerHTML;
+        var blood = $trparent.find("#oblood")[0].innerHTML;
+        $trparent.find("#cheight")[0].value = height;
+        $trparent.find("#cweight")[0].value = weight;
+        $trparent.find("#cblood")[0].value = blood;
+
+    });
+    $(".confirm_pedit").click(function() {
+        var id = $(this).attr("id");
+        var $trparent = $(this).closest("tr");
+
+        $trparent.find(".hidder").show();
+        $trparent.find(".shower").hide();
+        
+        var height = $trparent.find("#cheight")[0].value;
+        var weight = $trparent.find("#cweight")[0].value;
+        var blood = $trparent.find("#cblood")[0].value;
+
+
+
+        if(checkVis() == true)
+        document.getElementById("maindiv").style.width = "300px";
+
+        $.ajax({
+            type: "POST",
+            url: "./phy_updater.php",
+            data: {data1: id, data2: height, data3: weight, data4: blood},
+            dataType: "text",
+
+            success : function(result) {
+                if(result == "true"){
+        $trparent.find("#oheight")[0].innerHTML = height;
+        $trparent.find("#oweight")[0].innerHTML = weight;
+        $trparent.find("#oblood")[0].innerHTML = blood;
+
+                }
+                else{
+                    alert("Could not update entry");
+                }
+
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+
+
+        });
+
+    });
     $(".remove_regapp").click(function() {
         var appID = $(this).attr('id');    
-
+        var type = $("#hidden_type").val();
 
         $.ajax({
             type: "POST",
             url: "./cancel_appointment.php",
-            data: {data1: appID},
+            data: {data1: appID, data2: type},
             dataType: "text",
 
             success : function(result) {
 
                 window.location.reload();
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+
+
+        });
+
+
+    });
+    
+    $("#confirm_physhistbutton").click(function() {
+        console.log("working");
+
+        var lookatid = $("#id_getter").val();
+        var height = $("#height").val();
+        var weight = $("#weight").val();
+        var blood_type = $("#blood_type").val();
+
+        $.ajax({
+            type: "POST",
+            url: "./phyrec_maker.php",
+            data: {data1: lookatid, data2: height, data3: weight, data4: blood_type},
+            dataType: "text",
+
+            success : function(result) {
+
+                if(result == "true"){
+                    alert("Entry created");
+                    window.location.reload();
+                }
+                else{
+                    alert("Entry was not created");
+                    window.location.reload();
+
+                }
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+            });
+
+    });
+    $("#confirm_medhistbutton").click(function() {
+        console.log("working");
+
+        var lookatid = $("#id_getter").val();
+        var symptom = $("#symptom").val();
+        var treatment = $("#treatment").val();
+
+        $.ajax({
+            type: "POST",
+            url: "./medrec_maker.php",
+            data: {data1: lookatid, data2: treatment, data3: symptom},
+            dataType: "text",
+
+            success : function(result) {
+
+                if(result == "true"){
+                    alert("Entry created");
+                    window.location.reload();
+                }
+                else{
+                    alert("Entry was not created");
+                    window.location.reload();
+
+                }
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+            });
+
+    });
+    $("#confirm_prescriptionbutton").click(function() {
+        console.log("working");
+
+        var lookatid = $("#id_getter").val();
+        var tradename = $("#tradename").val();
+        var quantity = $("#quantity").val();
+
+        $.ajax({
+            type: "POST",
+            url: "./presc_maker.php",
+            data: {data1: lookatid, data2: tradename, data3: quantity},
+            dataType: "text",
+
+            success : function(result) {
+
+                if(result == "true"){
+                    alert("Prescription created");
+                    window.location.reload();
+                }
+                else{
+                    alert("Prescription was not created");
+                    window.location.reload();
+
+                }
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+            });
+
+    });
+
+    $(".pat_link").click(function() {
+        var uID = $(this).attr('id');    
+
+
+        $.ajax({
+            type: "POST",
+            url: "./view_personal_information.php",
+            data: {data1: uID},
+            dataType: "text",
+
+            success : function(result) {
+                window.location = "./view_personal_information.php";
 
             },
 
@@ -130,7 +425,14 @@ $(document).ready(function() {
 
 
     });
-
+    function checkVis() {
+        var answer = true;
+        $(".shower").each(function() {
+            if($(this).is(":visible"))
+                    answer = false;
+        });
+        return answer;
+    }
 
 
 

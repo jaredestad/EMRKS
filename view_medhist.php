@@ -1,6 +1,8 @@
 <?php
     session_start();
     
+    $lookatid = mysql_escape_string( base64_decode($_GET["id"]));
+    
     if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
@@ -9,30 +11,23 @@
     }
     else
     {
-        
+            
             $username = "root";
             $password = "password";
             $database = "xcao";
             $host = "localhost";
             $connect = mysql_connect($host,$username,$password);
             mysql_select_db($database, $connect);
-            
-            if($_SESSION["typeofuser"] == "doctor")
-            {
-                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."' ORDER BY date, time;";
-            }
-            else if($_SESSION["typeofuser"] == "patient")
-            {
-                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment WHERE patientID = '". $_SESSION["userID"] ."' ORDER BY date, time;";
-            }
-            else
-            {
-                $sql = "Select appointmentID, patientID, date, time FROM appointment ORDER BY date, time;";
-            }
-            
+        
+        
+        //$sql = "(SELECT * FROM medical_history AS m LEFT JOIN physical_history ON physical_history.date = m.date ORDER BY m.date) UNION (SELECT * FROM medical_history AS n RIGHT JOIN physical_history ON physical_history.date = n.date GROUP BY physical_history.date);";
+        
+            $sql = "SELECT * FROM medical_history WHERE patientID = '". $lookatid ."' ORDER BY date;";
+            $sql2 = "SELECT Fname, Lname FROM patient WHERE patientID ='". $lookatid ."';";
             
             $result = mysql_query($sql);
-            if(! $result) {
+        $result2 = mysql_query($sql2);
+            if(! $result || !$result2) {
                 die('Could not work: ' . mysql_error());
             }
             ?>
@@ -46,6 +41,7 @@
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
                 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
                 <script src="./basic_js.js" type="text/javascript"></script>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
                 <link href="./navbar.css" rel="stylesheet">
                 <link href="./input.css" rel="stylesheet">
             </head>
@@ -77,70 +73,73 @@
 
 
 <?php
-    echo "<div class=\"well welldiv\" style=\"width: 300px;\">";
-    echo "<div style=\"width: 300px; margin-left: 40px;\">";
-    echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Appointments</span>";
+    
+    
+    if(mysql_num_rows($result2) > 0)
+    {
+    while ($row2 = mysql_fetch_assoc($result2)){
+        $name = $row2["Fname"] ." ". $row2["Lname"];
+    }
+    }
+    
+    echo "<div class=\"well welldiv\" id='maindiv' style='width: 300px;'>";
+    echo "<div style='width: 300px; margin-left: 40px;'>";
+    echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Medical History for</span>";
     echo "<br>";
+    echo "<a href='view_personal_information.php?id=". base64_encode($lookatid) ."&type=". base64_encode(patient) ."' style=\"margin-left: 0px; font-weight: bold; font-size: 18px; cursor: pointer;\">$name</a>";
+    echo "<br>";
+    if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse")
+    {
+    echo "<input value=$lookatid id='id_getter' style='display: none;'></input>";
+    echo "<textarea type='text' id='symptom' placeholder='Symptoms...' cols='35' rows='3'></textarea>";
+    echo "<br>";
+    echo "<textarea type='text' id='treatment' placeholder='Treatment...' cols='35' rows='3'></textarea>";
+    echo "<button class=\"margins\" style=\"margin-top: 5px;\" id=\"confirm_medhistbutton\">Confirm</button>";
+    }
+    
     echo "<table>";
     
     echo "<thead>";
-    echo "<td>ID</td>";
-    echo "<td>Patient</td>";
     echo "<td>Date</td>";
-    echo "<td>Time</td>";
-    echo "<td>Doctor</td>";
+    echo "<td>Symptom</td>";
+    echo "<td>Treatment</td>";
+    if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse")
+    {
     echo "<td> </td>";
+    echo "<td> </td>";
+    }
     echo "</thead>";
     
     
     if(mysql_num_rows($result) > 0)
     {
-        while ($row = mysql_fetch_array($result)) {
+        
+        while ($row = mysql_fetch_assoc($result)) {
             
-            $appID = $row["appointmentID"];
-            $patID = $row["patientID"];
             $date = $row["date"];
-            $time = $row["time"];
-            $docID = $row["doctorID"];
+            $symptom = $row["symptom"];
+            $treatment = $row["treatment"];
+            $histID = $row["histID"];
             
             
-            $sql2 = "SELECT Fname, Lname FROM patient WHERE patientID = '". $patID ."';";
-            $result2 = mysql_query($sql2);
-            if(! $result2) {
-                die('Could not work: ' . mysql_error());
-            }
-            if(mysql_num_rows($result2) > 0)
-            {
-                while ($row2= mysql_fetch_array($result2)){
-                    
-                    $name = $row2["Fname"] ." ". $row2["Lname"];
-                }
-            }
-            
-            
-            
-            $sql3 = "SELECT Fname, Lname FROM doctor WHERE doctorID = '". $docID ."';";
-            $result3 = mysql_query($sql3);
-            if(! $result3) {
-                die('Could not work: ' . mysql_error());
-            }
-            if(mysql_num_rows($result3) > 0)
-            {
-                while ($row3 = mysql_fetch_array($result3)) {
-                    $name2 = $row3["Fname"] ." ". $row3["Lname"];
-                }
-            }
-            
-            echo "<tr>";
-            echo "<td>$appID</td>";
-            echo "<td><a href='view_personal_information.php?id=". base64_encode($patID) ."&type=". base64_encode(patient) ."'>$name</td>";
+            echo "<tr id='$histID'>";
             echo "<td>$date</td>";
-            echo "<td>$time</td>";
-            echo "<td><a href='view_personal_information.php?id=". base64_encode($docID) ."&type=". base64_encode(doctor) ."'>$name2</td>";
-            echo "<td><span id='$appID' class=\"remove_regapp\" style=\"margin-top: 5px;\">&#10006</span></td>";
-            echo "<input value='appointment' id='hidden_type' style='display: none;'></input>";
+            echo "<td class='hidder' id='osymptom'>$symptom</td>";
+            echo "<td class='hidder' id='otreatment'>$treatment</td>";
+            echo "<td class='shower' ><textarea id='csymptom' cols='40'>$symptom</textarea></td>";
+            echo "<td class='shower' ><textarea id='ctreatment' cols='40'>$treatment</textarea></td>";
+            if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse")
+            {
+            echo "<td class='hidder' ><span id='$histID' class=\"edit_hist\"><i class=\"fa fa-pencil-square-o\"</i></span></td>";
+            echo "<td class='shower'><span id='$histID' class=\"confirm_medit\"><i class=\"fa fa-check\"</i></span></td>";
+            echo "<td class='hidder' ><span id='$histID' class=\"remove_regapp\" style=\"margin-top: 5px;\">&#10006</span></td>";
+            echo "<td class='shower'><span id='$histID' class=\"cancel_medit\" style=\"margin-top: 5px;\">&#10006</span></td>";
+            }
+            echo "<input value='medrec' id='hidden_type' style='display: none;'></input>";
             echo "</tr>";
         }
+        
+        
     }
     echo "</table>";
     
@@ -150,6 +149,7 @@
     
     mysql_close();
     }
+    
     
     
     

@@ -1,8 +1,8 @@
 <?php
     session_start();
     
-    $lookatid = mysql_escape_string( $_GET["id"] );
-    $lookattype = mysql_escape_string( $_GET["type"]);
+    $lookatid = mysql_escape_string( base64_decode($_GET["id"]));
+    $lookattype = mysql_escape_string( base64_decode($_GET["type"]));
     
     
     if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
@@ -13,17 +13,6 @@
     }
     else
     {
-        
-        if( $_SESSION["typeofuser"] == "patient" && $lookattype == "patient")
-        {
-            echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
-            echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
-            die();
-            
-        }
-        else
-        {
-            
             $username = "root";
             $password = "password";
             $database = "xcao";
@@ -31,13 +20,13 @@
             $connect = mysql_connect($host,$username,$password);
             mysql_select_db($database, $connect);
             
-            if( $lookattype == "patient")
-            {
-                $sql = "SELECT Fname, Lname, Mname, ssn, age, gender, phone_number, email, address, city, state, zipcode FROM patient WHERE patientID = '". $lookatid ."';";
-            }
+                $sql = "SELECT Fname, Lname, Mname, SSN , age, gender, phone_number, email, address, city, state, zipcode FROM ". $lookattype ." WHERE ". $lookattype ."ID = '". $lookatid ."';";
             
             
             $result = mysql_query($sql);
+            if(! $result) {
+                die('Could not work: ' . mysql_error());
+            }
             ?>
             <!DOCTYPE html>
                 <title>EMRKS-Appointments</title>
@@ -81,7 +70,7 @@
 
 <?php
     echo "<div class=\"well welldiv\">";
-    echo "<div style=\"display: block; margin-left: 110px; margin-right: auto;\">";
+    echo "<div style=\"overflow: hidden; margin-left: 10px; margin-right: auto;\">";
     if(mysql_num_rows($result) > 0)
     {
         while ($row = mysql_fetch_array($result)) {
@@ -100,21 +89,24 @@
             $state = $row["state"];
         }
     }
-    echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Patient Information</span>";
+    echo "<div style='float: left;'>";
+    if($lookattype == "patient")
+    {
+        echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Patient Information</span>";
+    }
+    else if($lookattype == "doctor")
+    {
+        echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Doctor Information</span>";
+    }
     echo "<br>";
     echo "<p><b>First Name: </b>$Fname</p>";
     echo "<p><b>Last Name: </b>$Lname</p>";
     echo "<p><b>Middle Name: </b>$Mname</p>";
-    ?>
-<?php if($_SESSION["typeofuser"] == "receptionist"){
-
-echo "<p><b>SSN: </b>$ssn</p>";
-}?>
-<?php
     echo "<p><b>Age: </b>$age</p>";
     echo "<p><b>Gender: </b>$gender</p>";
     ?>
 <?php if($_SESSION["typeofuser"] == "receptionist"){
+    echo "<p><b>SSN: </b>$ssn</p>";
 echo "<p><b>Phone: </b>$phone</p>";
 echo "<p><b>Email: </b>$email</p>";
 echo "<p><b>Address: </b>$address</p>";
@@ -122,13 +114,54 @@ echo "<p><b>City: </b>$city</p>";
 echo "<p><b>State: </b>$state</p>";
 echo "<p><b>ZIP: </b>$zip</p>";
 }
-    ?>
-<?php
+    echo "</div>";
     
-    echo "<button >Prescribe</button>";
+    if($lookattype == "patient")
+    {
+    $sql2 = "SELECT allergy FROM allergies WHERE ". $lookattype ."ID = '". $lookatid ."';";
     
     
+    $result2 = mysql_query($sql2);
+    if(! $result2) {
+        die('Could not work: ' . mysql_error());
+    }
     
+    if(mysql_num_rows($result2) > 0)
+    {
+    echo "<div style='float: left; width: 150px; margin-left: 30px;'>";
+    echo "<ul>";
+        
+     while ($row2 = mysql_fetch_assoc($result2))
+     {
+         $allergy = $row2["allergy"];
+         echo "<li>$allergy</li>";
+    
+     }
+    echo "</ul>";
+    echo "</div>";
+    
+    }
+    
+    echo "<div style='margin-top: 5px; margin-left: 180px;'>";
+    
+    echo "<input type='text' id='allergy_input' placeholder='Allergy'>";
+    echo "<br>";
+    echo "<button style='margin-top: 5px;' id='add_allergy'>Add</button>";
+    echo "<input value=$lookatid id='id_getter' style='display: none;'></input>";
+    
+    echo "</div>";
+    
+    }
+    
+    echo "</div>";
+    
+    echo "<div>";
+    if($lookattype == "patient")
+    {
+        echo "<button onclick=\"location.href='./view_medhist.php?id=". base64_encode($lookatid) ."'\" id=\"medhist_button\" class=\"margins\">Medical Records</button>";
+        echo "<button onclick=\"location.href='./view_phyhist.php?id=". base64_encode($lookatid) ."'\" id=\"physhist_button\" class=\"margins\">Physical Records</button>";
+        echo "<button onclick=\"location.href='./prescribe.php?id=". base64_encode($lookatid) ."'\" id=\"prescriptions_button\" class=\"margins\">Prescriptions</button>";
+    }
     echo "</div>";
     echo "</div>";
     
@@ -138,8 +171,6 @@ echo "<p><b>ZIP: </b>$zip</p>";
 
 
 
-    
-    }
 
 
 

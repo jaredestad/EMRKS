@@ -47,21 +47,28 @@
 
 4 create table medical_history(
 	patientID int,
+	histID int auto_increment,
 	symptom char(254) not null,
+	date date not null,
 	treatment char(254) not null,
+	primary key(histID),
 	foreign key (patientID) references patient(patientID));
 
 5 create table labtest(
 	patientID int,
+	labtestID int auto_increment,
 	result char(254) not null,
 	date date not null,
 	foreign key (patientID) references patient(patientID));
 
 6 create table physical_history(
 	patientID int,
+	histID int auto_increment,
+	date date not null,
 	height int not null,
 	weight int not null,
 	blood_type char(2) not null,
+	primary key(histID),
 	foreign key (patientID) references patient(patientID));	
 
 7 create table allergies(
@@ -167,3 +174,10 @@
 	primary key(appointmentID),
 	foreign key(patientID) references patient(patientID),
 	foreign key(labtesterID) references labtester(labtesterID));
+
+
+(select * from medical_history as m
+left join physical_history on physical_history.date = m.date order by m.date)
+union 
+(select * from medical_history as n
+right join physical_history on physical_history.date = n.date group by physical_history.date);

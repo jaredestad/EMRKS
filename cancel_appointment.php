@@ -7,9 +7,24 @@
     $connect = mysql_connect($host,$username,$password);
     mysql_select_db($database, $connect);
     $appID = $_POST["data1"];
+    $type = $_POST["data2"];
     
-    
-    $query = "DELETE FROM appointment WHERE appointmentID = ". $appID .";";
+    if($type == "appointment")
+    {
+        $query = "DELETE FROM appointment WHERE appointmentID = ". $appID .";";
+    }
+    else if($type == "medrec")
+    {
+        $query = "DELETE FROM medical_history WHERE histID = ". $appID .";";
+    }
+    else if($type == "phyrec")
+    {
+        $query = "DELETE FROM physical_history WHERE histID = ". $appID .";";
+    }
+    else if($type == "presrec")
+    {
+        $query = "DELETE FROM prescription WHERE prescriptionID = ". $appID .";";
+    }
     $result = mysql_query($query);
     mysql_close();
     

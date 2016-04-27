@@ -101,7 +101,7 @@
     echo "<input type=\"text\" name=\"city\" value=\"$city\" placeholder=\"City\">";
     echo "<input type=\"text\" name=\"state\" value=\"$state\" placeholder=\"State\">";
     echo "<input type=\"text\" name=\"zip\" value=\"$zip\" placeholder=\"Zip Code\">";
-    echo "<input type=\"text\" name=\"pass\" value=\"$pass\" placeholder=\"Password\">";
+    echo "<input type=\"password\" name=\"pass\" value=\"$pass\" placeholder=\"Password\">";
     echo "</form>";
     echo "<button id=\"save_info\" style=\"margin-top: 5px;\" >Save</button>";
     echo "</div>";
