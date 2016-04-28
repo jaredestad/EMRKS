@@ -24,7 +24,7 @@ $(document).ready(function() {
                 success: function(result){
                     console.log(result);
 
-                    if( result == false){
+                    if( result == "false"){
                         $("#password_input").val("");
                         $("#bad_auth").show();
                     }

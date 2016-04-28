@@ -151,7 +151,7 @@ if($_SESSION["typeofuser"] == "patient" || $_SESSION["typeofuser"] == "reception
             }
            echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Insurance Information</span>";
             echo "<p><b>Company: </b>$company</p>";
-            echo "<p><b>Company No: </b>$co_num/p>";
+            echo "<p><b>Company No: </b>$co_num</p>";
             echo "<p><b>Card No: </b>$card</p>";
             
         }

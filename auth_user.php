@@ -115,8 +115,6 @@
         $_SESSION["Fname"] = $row["Fname"];
         $_SESSION["Lname"] = $row["Lname"];
             
-            echo $_SESSION["userID"];
-            echo $_SESSION["typeofuser"];
             echo "true";
         }
     }
