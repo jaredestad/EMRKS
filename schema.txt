@@ -59,6 +59,7 @@
 	labtestID int auto_increment,
 	result char(254) not null,
 	date date not null,
+	primary key(labtestID),
 	foreign key (patientID) references patient(patientID));
 
 6 create table physical_history(

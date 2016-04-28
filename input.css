@@ -6,14 +6,14 @@ html {
     width: 20px;
 
 }
-.remove_regapp:hover, .cancel_edit:hover, .cancel_medit:hover {
+.remove_regapp:hover, .cancel_edit:hover, .cancel_medit:hover, .remove_testapp:hover, .cancel_ledit:hover {
     color: #ff0000;
     cursor: pointer;
 }
 .shower {
     display: none;
 }
-.edit_hist:hover, .confirm_pedit:hover, .confirm_medit:hover {
+.edit_hist:hover, .confirm_pedit:hover, .confirm_medit:hover, .confirm_ledit:hover {
     color: #33cc33;
     cursor: pointer;
 }

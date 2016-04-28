@@ -1,5 +1,48 @@
 $(document).ready(function() {
 
+    $("#setinsurance_button").click(function() {
+        if(validateForm() == false){
+            alert("Please complete all fields");
+        }
+        else{
+            var id = $("#id_getter")[0].value;
+
+            var card = $("#cardno")[0].value;
+            var company = $("#conam")[0].value;
+            var phone = $("#cono")[0].value;
+            
+
+            $.ajax({
+                type: "POST",
+                url: "./add_insurance.php",
+                traditional: true,
+                data: {data1: card, data2: company, data3: phone, data4: id},
+                dataType: "text",
+
+            success : function(result) {
+                if(result == "true"){
+                    alert("Information succesfully updated");
+                    window.location = "./home.php";
+                }
+                else{
+                    alert("Could not update information");
+                }
+
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+
+
+
+            });
+        }
+
+    });
     $("#add_allergy").click(function() {
         var id = $("#id_getter")[0].value;
         var allergy = $("#allergy_input")[0].value;
@@ -30,6 +73,60 @@ $(document).ready(function() {
 
 
         });
+    });
+    $(".confirm_ledit").click(function() {
+        var id = $(this).attr("id");
+        var $trparent = $(this).closest("tr");
+
+        $trparent.find(".hidder").show();
+        $trparent.find(".shower").hide();
+        
+        var results = $trparent.find("#cresults")[0].value;
+        
+
+
+        if(checkVis() == true)
+        document.getElementById("maindiv").style.width = "300px";
+
+        $.ajax({
+            type: "POST",
+            url: "./labtest_updater.php",
+            data: {data1: id, data2: results},
+            dataType: "text",
+
+            success : function(result) {
+                if(result == "true"){
+        $trparent.find("#oresults")[0].innerHTML = results;
+
+                }
+                else{
+                    alert("Could not update entry");
+                }
+
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+
+
+        });
+    });
+    $(".cancel_ledit").click(function() {
+        var id = $(this).attr("id");
+        var $trparent = $(this).closest("tr");
+
+        $trparent.find(".hidder").show();
+        $trparent.find(".shower").hide();
+        if(checkVis() == true)
+            document.getElementById("maindiv").style.width = "300px";
+        var results = $trparent.find("#oresults")[0].innerHTML;
+
+        $trparent.find("#cresults")[0].value = results;
+
     });
     $(".edit_hist").click(function() {
         var id = $(this).attr("id");
@@ -189,6 +286,39 @@ $(document).ready(function() {
 
     });
     
+    $("#confirm_labtestbutton").click(function() {
+        console.log("working");
+
+        var lookatid = $("#id_getter").val();
+        var results = $("#result").val();
+
+        $.ajax({
+            type: "POST",
+            url: "./labresult_maker.php",
+            data: {data1: lookatid, data2: results},
+            dataType: "text",
+
+            success : function(result) {
+
+                if(result == "true"){
+                    window.location.reload();
+                }
+                else{
+                    alert("Entry was not created");
+                    window.location.reload();
+
+                }
+
+            },
+
+            error : function(jqXHR, textStatus, errorThrown) {
+                        console.log( errorThrown );
+                        console.log("error jqXHR: " + jqXHR);
+                        console.log("error textStatus: " + textStatus);
+                    }   
+            });
+
+    });
     $("#confirm_physhistbutton").click(function() {
         console.log("working");
 
@@ -350,6 +480,45 @@ $(document).ready(function() {
 
     });
 
+    $("#makelabtestapp_button").click(function() {
+        console.log( $("#app_select").val());
+        if(validateForm() == false || $("#app_select").val() == ""){
+            alert("Please complete all fields");
+        }
+        else{
+            var testerID = $("#app_select").val(); 
+            var time = $("#time_input").val();
+            var date = $("#date_input").val();
+            var patID = $("#get_patID").val();
+            console.log(testerID + " " +time +" "+date+" " +patID);
+
+            $.ajax({
+                type: "POST",
+                url: "./labapp_maker.php",
+                traditional: true,
+                data: { data1: testerID, data2: time, data3: date, data4: patID},
+                dataType: "text",
+
+                success : function(result) {
+                    if(result == "true"){
+                    alert("Appointment successfully booked");
+                    window.location = "./home.php";
+                    }
+                    else{
+                       alert("An error occurred. Please use the correct date/time formats.");
+                       window.location.reload();
+                    }
+                },
+
+                error : function(jqXHR, textStatus, errorThrown) {
+                            console.log( errorThrown );
+                            console.log("error jqXHR: " + jqXHR);
+                            console.log("error textStatus: " + textStatus);
+                        }  
+            });
+
+        }
+    });
     $("#makeappointment_button").click(function() {
         console.log( $("#app_select").val());
         if(validateForm() == false || $("#app_select").val() == ""){

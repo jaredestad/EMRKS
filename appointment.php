@@ -19,15 +19,15 @@
             
             if($_SESSION["typeofuser"] == "doctor")
             {
-                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."' ORDER BY date, time;";
+                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment WHERE doctorID = '". $_SESSION["userID"] ."' ORDER BY date, time DESC;";
             }
             else if($_SESSION["typeofuser"] == "patient")
             {
-                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment WHERE patientID = '". $_SESSION["userID"] ."' ORDER BY date, time;";
+                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment WHERE patientID = '". $_SESSION["userID"] ."' ORDER BY date, time DESC;";
             }
             else
             {
-                $sql = "Select appointmentID, patientID, date, time FROM appointment ORDER BY date, time;";
+                $sql = "Select appointmentID, patientID, date, time, doctorID FROM appointment ORDER BY date, time DESC;";
             }
             
             
@@ -35,48 +35,55 @@
             if(! $result) {
                 die('Could not work: ' . mysql_error());
             }
-            ?>
-            <!DOCTYPE html>
-                <title>EMRKS-Appointments</title>
-            <html>
-            <head>
-                <meta http-equiv="Content-Type" content="text/html"/>
-                <meta charset="utf-8"/>
-                <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-                <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-                <script src="./basic_js.js" type="text/javascript"></script>
-                <link href="./navbar.css" rel="stylesheet">
-                <link href="./input.css" rel="stylesheet">
-            </head>
-            <body>
-                <!-- navbar section -->
-                <div class="navbar">
-                    <ul>
-                    <a style="font-size: 20px; font-weight: bold;" href="#">EMRKS</a>
-                    <li><a href="editpage">Edit Information</a></li>
-
-                <?php if($_SESSION["typeofuser"] == "patient") : ?>
-                    <li><a href=\"bookpage\">Book Appointment</a></li>
-                    <li><a href=\"viewap\">Search For Doctor</a></li>
-                    <li><a href=\"viewap\">My Records</a></li>
-                    <li><a href=\"viewap\">My Appointments</a></li>
-                <?php endif; ?>
-                <?php if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse" || $_SESSION["typeofuser"] == "admin" || $_SESSION["typeofuser"] == "receptionist") : ?>
-                    <li><a href=\"viewap\">View Appointments</a></li>
-<?php endif; ?>
-<?php if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse" || $_SESSION["typeofuser"] == "admin" || $_SESSION["typeofuser"] == "receptionist") : ?>
-<li><a href=\"viewap\">Search For Patient</a></li>
-<?php endif; ?>
-
-</ul>
-</div>
-<div style="margin-top: -60px; margin-left: 1200px;">
-<a href="logout.php" style="color: white;">Logout</a>
-</div>
-
-
-<?php
+        
+        
+        
+        
+        echo "<!DOCTYPE html>
+        <html>
+        <title>EMRKS-Home</title>
+        <head>
+        <meta http-equiv=\"Content-Type\" content=\"text/html\"/>
+        <meta charset=\"utf-8\"/>
+        <link rel=\"stylesheet\" href=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\">
+        <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js\"></script>
+        <script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js\"></script>
+        <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css\">
+        <script src=\"./basic_js.js\" type=\"text/javascript\"></script>
+        <link href=\"./navbar.css\" rel=\"stylesheet\">
+        <link href=\"./input.css\" rel=\"stylesheet\">
+        </head>";
+        
+        echo"<body>
+        <!-- navbar section -->
+        <div class=\"navbar\">
+        <ul>
+        <a style=\"font-size: 20px; font-weight: bold;\" href=\"#\">EMRKS</a>";
+        echo "<li><a href=\"edit_information.php\">Edit Information</a></li>";
+        
+        if($_SESSION["typeofuser"] == "patient")
+        {
+            echo "<li><a href=\"makeappointment.php\">Book Appointment</a></li>";
+            //echo "<li><a href=\"viewap\">Search For Doctor</a></li>";
+            echo "<li><a href='view_personal_information.php?id=". base64_encode($_SESSION["userID"]) ."&type=". base64_encode($_SESSION["typeofuser"]) ."'>My Records</a></li>";
+            echo "<li><a href=\"appointment.php\">My Appointments</a></li>";
+            echo "<li><a href=\"test_appointment.php\">My Lab Tests</a></li>";
+            echo "<li><a href=\"addedit_insurance.php\">Add/Edit Insurance Information</a></li>";
+        }
+        if($_SESSION["typeofuser"] != "patient") {
+            echo "<li><a href=\"appointment.php\">View Appointments</a></li>";
+            echo "<li><a href=\"test_appointment.php\">View Lab Tests</a></li>";
+        }
+        if($_SESSION["typeofuser"] == "doctor" || $_SESSION["typeofuser"] == "nurse" || $_SESSION["typeofuser"] == "admin" || $_SESSION["typeofuser"] == "receptionist") {
+            echo "<li><a href=\"viewap\" style=\"display: none\">Search For Patient</a></li>";
+        }
+        echo "</ul>
+        </div>
+        <div style=\"margin-top: -60px; margin-left: 1200px;\">
+        <a href=\"logout.php\" style=\"color: white;\">Logout</a>
+        </div>";
+        
+        
     echo "<div class=\"well welldiv\" style=\"width: 300px;\">";
     echo "<div style=\"width: 300px; margin-left: 40px;\">";
     echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Appointments</span>";
@@ -89,7 +96,10 @@
     echo "<td>Date</td>";
     echo "<td>Time</td>";
     echo "<td>Doctor</td>";
+    if($_SESSION["typeofuser"] != "labtester")
+    {
     echo "<td> </td>";
+    }
     echo "</thead>";
     
     
@@ -137,7 +147,10 @@
             echo "<td>$date</td>";
             echo "<td>$time</td>";
             echo "<td><a href='view_personal_information.php?id=". base64_encode($docID) ."&type=". base64_encode(doctor) ."'>$name2</td>";
+            if($_SESSION["typeofuser"] != "labtester")
+            {
             echo "<td><span id='$appID' class=\"remove_regapp\" style=\"margin-top: 5px;\">&#10006</span></td>";
+            }
             echo "<input value='appointment' id='hidden_type' style='display: none;'></input>";
             echo "</tr>";
         }

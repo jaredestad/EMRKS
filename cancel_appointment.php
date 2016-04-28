@@ -13,6 +13,14 @@
     {
         $query = "DELETE FROM appointment WHERE appointmentID = ". $appID .";";
     }
+    else if($type == "lab_appointment")
+    {
+        $query = "DELETE FROM test_appointment WHERE appointmentID = ". $appID .";";
+    }
+    else if($type == "labrec")
+    {
+        $query = "DELETE FROM labtest WHERE labtestID = ". $appID .";";
+    }
     else if($type == "medrec")
     {
         $query = "DELETE FROM medical_history WHERE histID = ". $appID .";";

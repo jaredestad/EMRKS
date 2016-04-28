@@ -27,7 +27,7 @@
             $connect = mysql_connect($host,$username,$password);
             mysql_select_db($database, $connect);
             
-            $sql = "Select doctorID, Fname, Lname FROM doctor;";
+            $sql = "SELECT * FROM insurance WHERE patientID = '". $_SESSION["userID"] ."';";
             
             
             $result = mysql_query($sql);
@@ -83,27 +83,26 @@
             
             
             
-        echo "<div class=\"well welldiv reg-forms\">";
+        echo "<div class=\"well welldiv reg-forms\" style='width: 300px;'>";
         echo "<div style=\"display: block; margin-left: 110px; margin-right: auto;\">";
-        echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Make an Appointment</span>";
+        echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Set Up Insurance</span>";
         echo "<br>";
-        echo "<form id=\"app_form\">";
-        echo "<input type=\"text\" id=\"time_input\" placeholder=\"00:00:00\">";
-        echo "<input type=\"text\" id=\"date_input\" placeholder=\"YYYY-MM-DD\">";
-        echo "</form>";
-        echo "<select id=\"app_select\" style=\"margin-top: 5px;\">";
-        echo "<option value=\"\"> </option>";
+        
         if(mysql_num_rows($result) > 0)
         {
         while ($row = mysql_fetch_array($result)) {
-            $name = $row["Fname"] ." ". $row["Lname"];
-            $docID = $row["doctorID"];
-            
-            echo "<option value =\"$docID\">$name</option>";
+            $card = $row["card_number"];
+            $company = $row["company_name"];
+            $company_phone = $row["company_phone"];
             }
         }
-        echo "</select><br>";
-        echo "<button id=\"makeappointment_button\" style=\"margin-top: 5px;\">Book Appointment</button>";
+            echo "<form id=\"insure_form\">";
+            echo "<input type=\"text\" id=\"cardno\" placeholder=\"Card Number\" value='$card'>";
+            echo "<input type=\"text\" id=\"conam\" placeholder=\"Company\" value='$company'>";
+            echo "<input type=\"text\" id=\"cono\" placeholder=\"Company Phone\" value='$company_phone'>";
+            echo "</form>";
+        echo "<button id=\"setinsurance_button\" style=\"margin-top: 5px;\">Confirm Information</button>";
+        echo "<input value=". $_SESSION["userID"] ." id='id_getter' style='display: none;'></input>";
         echo "</div>";
         echo "</div>";
     

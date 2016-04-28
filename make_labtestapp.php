@@ -1,6 +1,9 @@
 <?php
     session_start();
     
+    
+    $patID = mysql_real_escape_string( base64_decode($_GET["id"]) );
+    
     if(!isset($_SESSION["userID"]) || !isset($_SESSION["typeofuser"]))
     {
         echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
@@ -10,7 +13,7 @@
     else
     {
         
-        if( !($_SESSION["typeofuser"] == "patient") )
+        if( $_SESSION["typeofuser"] != "doctor" && $_SESSION["typeofuser"] != "nurse")
         {
             echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
             echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
@@ -27,14 +30,15 @@
             $connect = mysql_connect($host,$username,$password);
             mysql_select_db($database, $connect);
             
-            $sql = "Select doctorID, Fname, Lname FROM doctor;";
+            $sql = "Select labtesterID, Fname, Lname FROM labtester;";
             
             
             $result = mysql_query($sql);
             if(! $result) {
                 die('Could not work: ' . mysql_error());
             }
-           
+       
+            
             
             
             echo "<!DOCTYPE html>
@@ -85,11 +89,12 @@
             
         echo "<div class=\"well welldiv reg-forms\">";
         echo "<div style=\"display: block; margin-left: 110px; margin-right: auto;\">";
-        echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Make an Appointment</span>";
+        echo "<span style=\"margin-left: 0px; font-weight: bold; font-size: 18px;\">Arrange a Lab Test</span>";
         echo "<br>";
         echo "<form id=\"app_form\">";
         echo "<input type=\"text\" id=\"time_input\" placeholder=\"00:00:00\">";
         echo "<input type=\"text\" id=\"date_input\" placeholder=\"YYYY-MM-DD\">";
+    echo "<input type='text' value='$patID' id='get_patID' style='display: none;'>";
         echo "</form>";
         echo "<select id=\"app_select\" style=\"margin-top: 5px;\">";
         echo "<option value=\"\"> </option>";
@@ -97,13 +102,13 @@
         {
         while ($row = mysql_fetch_array($result)) {
             $name = $row["Fname"] ." ". $row["Lname"];
-            $docID = $row["doctorID"];
+            $testerID = $row["labtesterID"];
             
-            echo "<option value =\"$docID\">$name</option>";
+            echo "<option value =\"$testerID\">$name</option>";
             }
         }
         echo "</select><br>";
-        echo "<button id=\"makeappointment_button\" style=\"margin-top: 5px;\">Book Appointment</button>";
+        echo "<button id=\"makelabtestapp_button\" style=\"margin-top: 5px;\">Book Lab Test</button>";
         echo "</div>";
         echo "</div>";
     

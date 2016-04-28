@@ -110,10 +110,13 @@
         while(($row = mysql_fetch_assoc($result_tester)) != null)
         {
         
-        $_SESSION["userID"] = $row["testerID"];
+        $_SESSION["userID"] = $row["labtesterID"];
         $_SESSION["typeofuser"] = "labtester";
         $_SESSION["Fname"] = $row["Fname"];
         $_SESSION["Lname"] = $row["Lname"];
+            
+            echo $_SESSION["userID"];
+            echo $_SESSION["typeofuser"];
             echo "true";
         }
     }
