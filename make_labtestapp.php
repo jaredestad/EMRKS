@@ -15,7 +15,7 @@
         
         if( $_SESSION["typeofuser"] != "doctor" && $_SESSION["typeofuser"] != "nurse")
         {
-            echo "<script>setTimeout('location.href = \"login.html\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
+            echo "<script>setTimeout('location.href = \"home.php\";', 1500);</script>"; //http://stackoverflow.com/questions/18305258/display-message-before-redirect-to-other-page
             echo "<script type='text/javascript'>alert('You have been denied access to this page');</script>"; //http://stackoverflow.com/questions/13851528/how-to-pop-an-alert-message-box-using-php
             die();
             
